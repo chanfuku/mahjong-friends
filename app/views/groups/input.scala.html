@@ -1,0 +1,19 @@
+@(message: String)
+@main(message){
+	@helper.form(action = routes.GroupsController.create){
+	<fieldset>
+		<legend>@message</legend>
+			<p>グループ名</p>
+			<p><input type="text" name="groupName"></p>
+			<p>メンバー1</p>
+			<p>名前:<input type="text" name="playerNames[]"></p>
+			<p>メンバー2</p>
+			<p>名前:<input type="text" name="playerNames[]"></p>
+			<p>メンバー3</p>
+			<p>名前:<input type="text" name="playerNames[]"></p>
+			<p>メンバー4</p>
+			<p>名前:<input type="text" name="playerNames[]"></p>
+		<p><input type="submit" value="登録"></p>	
+	</fieldset>
+	}
+}

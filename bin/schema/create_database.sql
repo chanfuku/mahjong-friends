@@ -1,0 +1,1 @@
+CREATE DATABASE mahjong_friends CHARACTER SET utf8;
