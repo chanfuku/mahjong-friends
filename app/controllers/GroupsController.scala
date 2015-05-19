@@ -17,8 +17,8 @@ object GroupsController extends Controller {
   //グループ登録用Form FixMe:外出ししたい
   val groupRegistForm = Form(
     mapping(
-      "groupName" -> text,
-      "playerNames" -> list(text))(GroupWithUsers.apply)(GroupWithUsers.unapply))
+      "groupName" -> nonEmptyText,
+      "playerNames" -> list(nonEmptyText))(GroupWithUsers.apply)(GroupWithUsers.unapply))
 
   def lists() = Action { request =>
     DB autoCommit { implicit session =>
@@ -33,13 +33,23 @@ object GroupsController extends Controller {
 
   def create() = Action { implicit request =>
     DB autoCommit { implicit session =>
-      //グループを作成し、グループIDを取得する
-      val groupName = groupRegistForm.bindFromRequest.get.groupName
-      val groupId = Group.create(groupName)
-      //TODO:取得したグループIDで４人分のユーザを登録する
-      val playerNames = groupRegistForm.bindFromRequest.get.playerNames
-      val playerIds = playerNames.map(x => Player.create(x, groupId))
-      Ok(s"groupId:${groupId}, playerId:${playerIds.toString()}")
+      groupRegistForm.bindFromRequest.fold(
+        formWithErrors => BadRequest("未入力の項目があります"),
+        GroupWithUsers => {
+          //グループを作成し、グループIDを取得する
+          val groupId = Group.create(GroupWithUsers.groupName)
+          //取得したグループIDで４人分のユーザを登録する
+          GroupWithUsers.playerNames.map(x => Player.create(x, groupId))
+          SeeOther(s"/groups/${groupId}")
+        })
+    }
+  }
+
+  def show(id: Long) = Action { implicit request =>
+    DB autoCommit { implicit session =>
+      //グループ情報(メンバー名、収支..etc)を取得する
+      val players: List[Player] = Player.findByGroupId(id)
+      Ok(views.html.groups.info(players))
     }
   }
 }

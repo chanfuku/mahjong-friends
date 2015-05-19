@@ -1,15 +1,14 @@
-CREATE TABLE
+CREATE TABLE groups (
   id BIGINT(20) UNSIGNED AUTO_INCREMENT,
   group_name VARCHAR(255) NOT NULL,
-  UNIQUE (group_name),
-  PRIMARY KEY (group_id)
+  PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
 CREATE TABLE players (
   id BIGINT(20) UNSIGNED AUTO_INCREMENT,
   player_name VARCHAR(255) NOT NULL,
   group_id BIGINT(20) UNSIGNED,
-  UNIQUE (player_name),
-  PRIMARY KEY (player_id),
-  FOREIGN KEY (group_id) REFERENCES groups(group_id)
-) ENGINE=InnoDB;
+  balance BIGINT(10) NOT NULL DEFAULT 0,
+  PRIMARY KEY (id,group_id),
+  FOREIGN KEY (group_id) REFERENCES groups(id)
+) ENGINE=InnoDB

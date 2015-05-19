@@ -1,0 +1,7 @@
+@(players: List[Player])
+@import helper._
+@for(player <- players){
+	<p>@player.groupId</p>
+	<p>@player.playerName</p>
+	<p>@player.balance</p>
+}

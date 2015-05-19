@@ -17,4 +17,6 @@ dist
 /.DS_Store
 /.cache
 /LICENSE
+/*.class
 *.class
+bin
