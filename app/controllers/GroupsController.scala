@@ -10,9 +10,7 @@ import scalikejdbc.DB
 object GroupsController extends Controller {
 
   //グループ登録用Case FixMe:外出ししたい
-  case class GroupWithUsers(
-    groupName: String,
-    playerNames: List[String])
+  case class GroupWithUsers(groupName: String, playerNames: List[String])
 
   //グループ登録用Form FixMe:外出ししたい
   val groupRegistForm = Form(
@@ -39,7 +37,7 @@ object GroupsController extends Controller {
           //グループを作成し、グループIDを取得する
           val groupId = Group.create(GroupWithUsers.groupName)
           //取得したグループIDで４人分のユーザを登録する
-          GroupWithUsers.playerNames.map(x => Player.create(x, groupId))
+          GroupWithUsers.playerNames.foreach(Player.create(_, groupId))
           SeeOther(s"/groups/${groupId}")
         })
     }
@@ -49,7 +47,8 @@ object GroupsController extends Controller {
     DB autoCommit { implicit session =>
       //グループ情報(メンバー名、収支..etc)を取得する
       val players: List[Player] = Player.findByGroupId(id)
-      Ok(views.html.groups.info(players))
+      val groupId: Long = players(0).groupId
+      Ok(views.html.groups.info(players, groupId))
     }
   }
 }

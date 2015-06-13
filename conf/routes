@@ -9,7 +9,11 @@ GET    /                controllers.Application.index
 GET    /groups          controllers.GroupsController.lists()
 GET    /groups/input    controllers.GroupsController.input()
 GET    /groups/:id      controllers.GroupsController.show(id: Long)
-POST   /groups/create   controllers.GroupsController.create()		
+POST   /groups/create   controllers.GroupsController.create()
+
+# 収支
+GET		/balance/input/:id	controllers.BalanceController.input(id: Long)
+POST    /balance/create controllers.BalanceController.create()
 
 # Map static resources from the /public folder to the /assets URL path
 GET    /assets/*file    controllers.Assets.at(path="/public", file)

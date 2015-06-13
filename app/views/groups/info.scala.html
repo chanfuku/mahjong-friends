@@ -1,7 +1,9 @@
-@(players: List[Player])
+@(players: List[Player], groupId: Long)
 @import helper._
+<p>グループ情報</p>
 @for(player <- players){
-	<p>@player.groupId</p>
-	<p>@player.playerName</p>
-	<p>@player.balance</p>
+	<p>グループ名：@player.group.get.groupName</p>
+	<p>名前：@player.playerName</p>
+	<p>収支：@player.balance</p>
 }
+<button onclick="location.href='/balance/input/@groupId'">収支登録</button>

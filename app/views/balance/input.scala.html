@@ -1,0 +1,16 @@
+@(message: String, players: List[Player], groupId: Long)
+@main(message){
+<p>収支登録</p>
+	@helper.form(action = routes.BalanceController.create){
+	<fieldset>
+		<legend>@message</legend>
+		@for(player <- players){
+			<p>名前：@player.playerName</p>
+			<p>収支：<input type="text" name="amount[]"></input></p>
+			<p><input type="hidden" name="playerIds[]" value="@player.id"></p>
+		}
+		<p><input type="hidden" name="groupId" value="@groupId"></p>		
+		<p><input type="submit" value="登録"></p>	
+	</fieldset>
+	}
+}

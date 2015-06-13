@@ -14,5 +14,7 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.2.1" % "test",
   "org.skinny-framework" %% "skinny-orm" % "1.3.14",
   "org.scalikejdbc" %% "scalikejdbc-test" % "2.2.+" % "test",
-  "org.fluentd" % "fluent-logger" % "0.3.1"
+  "org.fluentd" % "fluent-logger" % "0.3.1",
+  "jp.t2v" %% "play2-auth"      % "0.13.2",
+  "jp.t2v" %% "play2-auth-test" % "0.13.2" % "test"
 )
