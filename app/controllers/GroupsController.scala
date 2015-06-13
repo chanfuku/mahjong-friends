@@ -20,8 +20,8 @@ object GroupsController extends Controller {
 
   def lists() = Action { request =>
     DB autoCommit { implicit session =>
-      val groups = Group.findByGroupId("1")
-      Ok(groups.toString())
+      val groups = Group.findAll()
+      Ok(views.html.groups.list(groups))
     }
   }
 
