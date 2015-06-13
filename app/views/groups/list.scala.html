@@ -1,0 +1,4 @@
+@(groups: List[Group])
+@for(group <- groups){
+	<p>グループ名：<a href="/groups/@group.id">@group.groupName</a></p>
+}
