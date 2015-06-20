@@ -22,13 +22,13 @@ trait TestDBSetup {
 
   def createTables()(implicit session: DBSession) {
     sql"""
-CREATE TABLE groups (
+CREATE TABLE IF NOT EXISTs groups (
   id BIGINT(20) UNSIGNED AUTO_INCREMENT,
   group_name VARCHAR(255) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE players (
+CREATE TABLE IF NOT EXISTS players (
   id BIGINT(20) UNSIGNED AUTO_INCREMENT,
   player_name VARCHAR(255) NOT NULL,
   group_id BIGINT(20) UNSIGNED,
@@ -37,13 +37,13 @@ CREATE TABLE players (
   FOREIGN KEY (group_id) REFERENCES groups(id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE events (
+CREATE TABLE IF NOT EXISTS events (
   id BIGINT(20) UNSIGNED AUTO_INCREMENT,
   date DATE NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE balance_history (
+CREATE TABLE IF NOT EXISTS balance_history (
   id BIGINT(20) UNSIGNED AUTO_INCREMENT,
   player_id BIGINT(20) UNSIGNED NOT NULL,
   group_id BIGINT(20) UNSIGNED NOT NULL,
@@ -56,5 +56,4 @@ CREATE TABLE balance_history (
 ) ENGINE=InnoDB;
       """.update().apply
   }
-
 }
