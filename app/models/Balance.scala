@@ -6,7 +6,7 @@ import scalikejdbc.ResultName
 import scalikejdbc.DBSession
 import scalikejdbc.sqls
 
-case class Balance(id: Long, playerId: Long, groupId: Long, amount: Int)
+case class Balance(id: Long, playerId: Long, groupId: Long, eventId: Long, amount: Int)
 
 object Balance extends SkinnyCRUDMapper[Balance] {
   override lazy val tableName = "balance_history"
@@ -16,12 +16,14 @@ object Balance extends SkinnyCRUDMapper[Balance] {
     id = rs.get(rn.id),
     playerId = rs.int(rn.playerId),
     groupId = rs.int(rn.groupId),
+    eventId = rs.int(rn.eventId),
     amount = rs.int(rn.amount))
 
-  def create(playerId: Long, groupId: Long, amount: Int): Long = {
+  def create(playerId: Long, groupId: Long, eventId: Long, amount: Int): Long = {
     createWithNamedValues(
       column.playerId -> playerId,
       column.groupId -> groupId,
+      column.eventId -> eventId,
       column.amount -> amount)
   }
 

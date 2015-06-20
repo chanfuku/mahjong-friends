@@ -1,22 +1,24 @@
 package controllers
 
-import models.{ Player, Balance }
+import models.{ Player, Balance, Event }
 import play.api._
 import play.api.data._
 import play.api.data.Forms._
 import play.api.mvc._
 import scalikejdbc.DB
+import java.util.Date
 
 object BalanceController extends Controller {
 
   //収支登録用Case FixMe:外出ししたい
-  case class BalanceForInsertData(playerIds: List[Long], groupId: Long, amount: List[Int])
+  case class BalanceForInsertData(playerIds: List[Long], groupId: Long, date: Date, amount: List[Int])
 
   //収支登録用Form FixMe:外だししたい
   val balanceRegistForm = Form(
     mapping(
       "playerIds" -> list(longNumber),
       "groupId" -> longNumber,
+      "date" -> date("yyyy-MM-dd"),
       "amount" -> list(number))(BalanceForInsertData.apply)(BalanceForInsertData.unapply))
 
   def input(id: Long) = Action { request =>
@@ -32,13 +34,15 @@ object BalanceController extends Controller {
     DB autoCommit { implicit session =>
       balanceRegistForm.bindFromRequest.fold(
         formWithErrors => BadRequest,
-        f => f.playerIds.zipWithIndex.foreach { x =>
-          val playerId = x._1
-          val amount = f.amount(x._2)
-          Balance.create(playerId, f.groupId, amount)
-          Player.updateByGroupIdAndPlayerId(playerId, f.groupId, amount)
+        f => {
+          val eventId = Event.create(f.date)
+          f.playerIds.zipWithIndex.foreach {
+            case (playerId, amount) =>
+              Balance.create(playerId, f.groupId, eventId, amount)
+              Player.updateByGroupIdAndPlayerId(playerId, f.groupId, amount)
+          }
+          SeeOther(s"/groups/${f.groupId}")
         })
     }
-    Ok
   }
 }
