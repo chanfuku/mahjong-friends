@@ -25,8 +25,11 @@ object BalanceController extends Controller {
     DB autoCommit { implicit session =>
       //グループ情報(メンバー名、収支..etc)を取得する
       val players: List[Player] = Player.findByGroupId(id)
-      val groupId: Long = players(0).groupId
-      Ok(views.html.balance.input("収支登録", players, groupId))
+      if (players.size <= 0) BadRequest
+      else {
+        val groupId: Long = players(0).groupId
+        Ok(views.html.balance.input("収支登録", players, groupId))
+      }
     }
   }
 

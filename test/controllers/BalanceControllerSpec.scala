@@ -33,5 +33,13 @@ class BalanceControllerSpec extends FunSpec with TestDBSetup with TestData {
         }
       }
     }
+    it("存在しないグループIDの場合はBAD_REQUESTを返す") {
+      running(FakeApplication()) {
+        withTestData {
+          val result = route(FakeRequest(GET, s"${baseURL}/${unExGroupId}")).get
+          assert(status(result) == BAD_REQUEST)
+        }
+      }
+    }
   }
 }
