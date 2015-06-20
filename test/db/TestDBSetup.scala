@@ -1,3 +1,27 @@
+package db
+
+import scalikejdbc._
+
+trait TestDBSetup {
+
+  setup()
+
+  def setup(): Unit = {
+    System.setProperty("skinny.env", "test")
+    skinny.DBSettings.initialize()
+    implicit val session = AutoSession
+    createTables()
+  }
+
+  def deleteAll()(implicit session: DBSession): Unit = {
+    sql"DELETE FROM balance_history".update().apply()
+    sql"DELETE FROM events".update().apply()
+    sql"DELETE FROM players".update().apply()
+    sql"DELETE FROM groups".update().apply()
+  }
+
+  def createTables()(implicit session: DBSession) {
+    sql"""
 CREATE TABLE groups (
   id BIGINT(20) UNSIGNED AUTO_INCREMENT,
   group_name VARCHAR(255) NOT NULL,
@@ -30,4 +54,7 @@ CREATE TABLE balance_history (
   FOREIGN KEY (group_id) REFERENCES groups(id),
   FOREIGN KEY (event_id) REFERENCES events(id)
 ) ENGINE=InnoDB;
+      """.update().apply
+  }
 
+}

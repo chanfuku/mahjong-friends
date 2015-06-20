@@ -4,9 +4,10 @@
 	@helper.form(action = routes.BalanceController.create){
 	<fieldset>
 		<legend>@message</legend>
+		<p><p>日時：<input type="date" name="date"></p></p>
 		@for(player <- players){
 			<p>名前：@player.playerName</p>
-			<p>収支：<input type="text" name="amount[]"></input></p>
+			<p>収支：<input type="text" name="amount[]"></p>
 			<p><input type="hidden" name="playerIds[]" value="@player.id"></p>
 		}
 		<p><input type="hidden" name="groupId" value="@groupId"></p>		
