@@ -47,8 +47,10 @@ object GroupsController extends Controller {
     DB autoCommit { implicit session =>
       //グループ情報(メンバー名、収支..etc)を取得する
       val players: List[Player] = Player.findByGroupId(id)
-      val groupId: Long = players(0).groupId
-      Ok(views.html.groups.info(players, groupId))
+      players.headOption match {
+        case Some(x) => Ok(views.html.groups.info(players, x.groupId))
+        case None    => BadRequest
+      }
     }
   }
 }
