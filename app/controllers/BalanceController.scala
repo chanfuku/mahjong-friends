@@ -37,11 +37,13 @@ object BalanceController extends Controller {
       balanceRegistForm.bindFromRequest.fold(
         formWithErrors => BadRequest,
         f => {
-          val eventId = Event.create(f.date)
-          f.playerIds.zipWithIndex.foreach {
-            case (playerId, amount) =>
-              Balance.create(playerId, f.groupId, eventId, amount)
-              Player.updateByGroupIdAndPlayerId(playerId, f.groupId, amount)
+          for {
+            (playerId, i) <- f.playerIds.zipWithIndex
+          } yield {
+            val eventId = Event.create(f.date)
+            val amount = f.amount(i)
+            Balance.create(playerId, f.groupId, eventId, amount)
+            Player.updateByGroupIdAndPlayerId(playerId, f.groupId, amount)
           }
           SeeOther(s"/groups/${f.groupId}")
         })
