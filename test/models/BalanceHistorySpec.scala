@@ -8,9 +8,7 @@ import play.api.test.Helpers
 import play.api.test.Helpers._
 import scalikejdbc._
 
-class BalanceSpec extends FunSpec with TestDBSetup with TestData {
-
-  val amount = 1
+class BalanceHistorySpec extends FunSpec with TestDBSetup with TestData {
 
   def withTestData(test: => Any) = {
     implicit val session = AutoSession
@@ -25,11 +23,16 @@ class BalanceSpec extends FunSpec with TestDBSetup with TestData {
     }
   }
 
-  describe("Balance create()") {
+  describe("BalanceHistory create()") {
     it("成功する") {
       withTestData {
-        val id = Balance.create(playerId, groupId, eventId, amount)
-        assert(Balance.findById(id) == Some(Balance(id, playerId, groupId, eventId, amount)))
+        val id = BalanceHistory.create(playerId, groupId, balance)
+        assert(BalanceHistory.findById(id) == Some(BalanceHistory(
+          id,
+          playerId,
+          groupId,
+          balance,
+          Some(Player(playerId, playerName, groupId, balance, None)))))
       }
     }
   }

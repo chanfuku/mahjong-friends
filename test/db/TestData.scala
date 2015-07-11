@@ -2,15 +2,23 @@ package db
 
 import scalikejdbc.DBSession
 import scalikejdbc._
+import models.Player
+import models.Group
 
 trait TestData {
 
-  //有効データ
+  //Groupデータ
   lazy val groupId = 1
   lazy val groupName = "亀北沢ボーイズ"
+  //Playerデータ
   lazy val playerId = 1
   lazy val playerName = "イーペー太郎"
+  lazy val balance = 1000
+  //Eventデータ
   lazy val eventId = 1
+
+  lazy val sampleGroup = Group(groupId, groupName)
+  lazy val samplePlayer = Player(playerId, playerName, groupId, balance, Some(sampleGroup))
 
   //存在しないデータ
   lazy val unExGroupId = 999
