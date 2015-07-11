@@ -19,8 +19,9 @@ object GroupsController extends Controller {
       "playerNames" -> list(nonEmptyText))(GroupWithUsers.apply)(GroupWithUsers.unapply))
 
   def lists() = Action { request =>
-    DB autoCommit { implicit session =>
+    DB readOnly { implicit session =>
       val groups = Group.findAll()
+
       Ok(views.html.groups.list(groups))
     }
   }
@@ -44,12 +45,14 @@ object GroupsController extends Controller {
   }
 
   def show(id: Long) = Action { implicit request =>
-    DB autoCommit { implicit session =>
+    DB readOnly { implicit session =>
       //グループ情報(メンバー名、収支..etc)を取得する
       val players: List[Player] = Player.findByGroupId(id)
       players.headOption match {
-        case Some(x) => Ok(views.html.groups.info(players, x.groupId))
-        case None    => BadRequest
+        case Some(x) => {
+          Ok(views.html.groups.info(players, x.groupId))
+        }
+        case None => BadRequest
       }
     }
   }

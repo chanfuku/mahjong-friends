@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS events (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS balance_history (
+CREATE TABLE IF NOT EXISTS payment_history (
   id BIGINT(20) UNSIGNED AUTO_INCREMENT,
   player_id BIGINT(20) UNSIGNED NOT NULL,
   group_id BIGINT(20) UNSIGNED NOT NULL,
@@ -53,6 +53,16 @@ CREATE TABLE IF NOT EXISTS balance_history (
   FOREIGN KEY (player_id) REFERENCES players(id),
   FOREIGN KEY (group_id) REFERENCES groups(id),
   FOREIGN KEY (event_id) REFERENCES events(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS balance_history (
+  id BIGINT(20) UNSIGNED AUTO_INCREMENT,
+  player_id BIGINT(20) UNSIGNED NOT NULL,
+  group_id BIGINT(20) UNSIGNED NOT NULL,
+  balance BIGINT(10) NOT NULL DEFAULT 0,
+  PRIMARY KEY (id),
+  FOREIGN KEY (player_id) REFERENCES players(id),
+  FOREIGN KEY (group_id) REFERENCES groups(id)
 ) ENGINE=InnoDB;
       """.update().apply
   }

@@ -1,18 +1,15 @@
 package models
 
 import skinny.orm.SkinnyCRUDMapper
-import scalikejdbc.WrappedResultSet
-import scalikejdbc.ResultName
-import scalikejdbc.DBSession
-import scalikejdbc.sqls
+import scalikejdbc.{ WrappedResultSet, ResultName, DBSession, sqls }
 
-case class Balance(id: Long, playerId: Long, groupId: Long, eventId: Long, amount: Int)
+case class PaymentHistory(id: Long, playerId: Long, groupId: Long, eventId: Long, amount: Int)
 
-object Balance extends SkinnyCRUDMapper[Balance] {
-  override lazy val tableName = "balance_history"
-  override lazy val defaultAlias = createAlias("b")
+object PaymentHistory extends SkinnyCRUDMapper[PaymentHistory] {
+  override lazy val tableName = "payment_history"
+  override lazy val defaultAlias = createAlias("ph")
 
-  def extract(rs: WrappedResultSet, rn: ResultName[Balance]): Balance = new Balance(
+  def extract(rs: WrappedResultSet, rn: ResultName[PaymentHistory]): PaymentHistory = new PaymentHistory(
     id = rs.get(rn.id),
     playerId = rs.int(rn.playerId),
     groupId = rs.int(rn.groupId),
@@ -26,5 +23,4 @@ object Balance extends SkinnyCRUDMapper[Balance] {
       column.eventId -> eventId,
       column.amount -> amount)
   }
-
 }
