@@ -1,6 +1,6 @@
 package controllers
 
-import models.{ Player, PaymentHistory, Event, BalanceHistory }
+import models.{ Group, Player, PaymentHistory, Event, BalanceHistory }
 import play.api._
 import play.api.data._
 import play.api.data.Forms._
@@ -32,9 +32,14 @@ object BalanceController extends Controller {
     }
   }
 
-  //  def history(groupId: Long) = Action { request =>
-  //
-  //  }
+  def history(groupId: Long) = Action { request =>
+    DB readOnly { implicit session =>
+      val balanceList = Player.findByGroupId(groupId).map { player =>
+        (player.playerName, BalanceHistory.findBalance(player.id, groupId).map(_.balance).toList)
+      }
+      Ok(views.html.groups.history(balanceList))
+    }
+  }
 
   def create() = Action { implicit request =>
     DB autoCommit { implicit session =>
@@ -46,11 +51,11 @@ object BalanceController extends Controller {
           } yield {
             val eventId = Event.create(f.date)
             val amount = f.amount(i)
+            Player.updateByGroupIdAndPlayerId(playerId, f.groupId, amount)
             Player.findByPlayerId(playerId) match {
               case Some(x) => {
                 PaymentHistory.create(playerId, f.groupId, eventId, amount)
                 BalanceHistory.create(playerId, f.groupId, x.balance)
-                Player.updateByGroupIdAndPlayerId(playerId, f.groupId, amount)
               }
               case None => NotFound
             }

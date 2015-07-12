@@ -6,5 +6,5 @@ POST   /groups/create   controllers.GroupsController.create()
 
 # 収支
 GET		/balance/input/:groupId	controllers.BalanceController.input(groupId: Long)
-#GET		/balance/histoty/:gruopId	controllers.BalanceController.history(groupId: Long)
+GET		/balance/histoty/:groupId	controllers.BalanceController.history(groupId: Long)
 POST    /balance/create controllers.BalanceController.create()

@@ -16,7 +16,7 @@ object Group extends SkinnyCRUDMapper[Group] {
     id = rs.get(rn.id),
     groupName = rs.string(rn.groupName))
 
-  def findByGroupId(groupId: String)(implicit session: DBSession): Option[Group] = {
+  def findByGroupId(groupId: Long)(implicit session: DBSession): Option[Group] = {
     findBy(sqls.eq(defaultAlias.id, groupId))
   }
 
