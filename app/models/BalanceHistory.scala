@@ -26,4 +26,8 @@ object BalanceHistory extends SkinnyCRUDMapper[BalanceHistory] {
       column.groupId -> groupId,
       column.balance -> balance)
   }
+
+  def findBalance(playerId: Long, groupId: Long): List[BalanceHistory] = {
+    findAllBy(sqls.eq(defaultAlias.playerId, playerId).and.eq(defaultAlias.groupId, groupId))
+  }
 }

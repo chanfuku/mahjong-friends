@@ -1,0 +1,6 @@
+@(balanceList: List[(String, List[Long])])
+@import helper._
+@for(balance <- balanceList){
+	<p>ユーザ名：@balance._1</p>
+	<p>履歴：@balance._2.mkString(",")</p>
+}
